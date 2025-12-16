@@ -96,12 +96,27 @@ main {
 }
 
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-weight: 600;
   letter-spacing: 0.02em;
   font-size: 15px;
 }
 
-.logo span {
+.logo-mark {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+.logo-text {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.logo-sub {
   font-weight: 400;
   color: #9ca3af;
 }

@@ -1,0 +1,14 @@
+<svg width="120" height="36" viewBox="0 0 120 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="4" width="28" height="28" rx="14" fill="#0F172A"/>
+  <rect x="4.5" y="6.5" width="23" height="23" rx="11.5" fill="#111827" stroke="#1D4ED8" stroke-width="1.5"/>
+  <path d="M12 23V14.5H13.9V21.2H17.7V23H12Z" fill="#E5E7EB"/>
+  <path d="M19.2 23V14.5H21.1L23.6 18.5H23.7V14.5H25.6V23H23.8L21.3 19.1H21.2V23H19.2Z" fill="#60A5FA"/>
+  <text x="38" y="21" fill="#0F172A" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13" letter-spacing="0.08em">
+    JUNG MIKYUNG
+  </text>
+  <text x="38" y="29" fill="#6B7280" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="9" letter-spacing="0.18em">
+    UX RESEARCHER
+  </text>
+</svg>
+
+
