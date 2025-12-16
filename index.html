@@ -15,6 +15,62 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
+
+    <!-- Mixpanel: 공식 스니펫 사용 -->
+    <script>
+      (function (f, b) {
+        if (!b.__SV) {
+          var a, e, i, g;
+          window.mixpanel = b;
+          b._i = [];
+          b.init = function (a, e, d) {
+            function f(b, h) {
+              var a = h.split(".");
+              2 == a.length && ((b = b[a[0]]), (h = a[1]));
+              b[h] = function () {
+                b.push([h].concat(Array.prototype.slice.call(arguments, 0)));
+              };
+            }
+            var c = b;
+            "undefined" !== typeof d ? (c = b[d] = []) : (d = "mixpanel");
+            c.people = c.people || [];
+            c.toString = function (b) {
+              var a = "mixpanel";
+              "mixpanel" !== d && (a += "." + d);
+              b || (a += " (stub)");
+              return a;
+            };
+            c.people.toString = function () {
+              return c.toString(1) + ".people (stub)";
+            };
+            i =
+              "disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(
+                " "
+              );
+            for (g = 0; g < i.length; g++) f(c, i[g]);
+            b._i.push([a, e, d]);
+          };
+          b.__SV = 1.2;
+          a = f.createElement("script");
+          a.type = "text/javascript";
+          a.async = !0;
+          a.src = "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";
+          e = f.getElementsByTagName("script")[0];
+          e.parentNode.insertBefore(a, e);
+        }
+      })(document, window.mixpanel || []);
+
+      // 실제 프로젝트 토큰으로 초기화
+      mixpanel.init("4b33a262f4165a9095800206eb7953a9", {
+        debug: true,
+        track_pageview: false,
+      });
+
+      // 기본 페이지 뷰 트래킹
+      mixpanel.track("Page Viewed", {
+        page: "UX Portfolio - Home",
+      });
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -58,8 +114,22 @@
               제품팀의 의사결정을 돕습니다.
             </p>
             <div class="hero-actions">
-              <a href="#projects" class="btn primary">케이스 스터디 보기</a>
-              <a href="#contact" class="btn ghost">함께 일해보기</a>
+              <a
+                href="#projects"
+                class="btn primary"
+                data-mx-event="Hero_CaseStudyButton_Click"
+                data-mx-component="Hero.CaseStudyButton"
+              >
+                케이스 스터디 보기
+              </a>
+              <a
+                href="#contact"
+                class="btn ghost"
+                data-mx-event="Hero_ContactButton_Click"
+                data-mx-component="Hero.ContactButton"
+              >
+                함께 일해보기
+              </a>
             </div>
             <div class="hero-tags">
               <span>사용자 인터뷰</span>
@@ -414,6 +484,8 @@
             action="mailto:your.email@example.com"
             method="post"
             enctype="text/plain"
+            data-mx-event="Contact_Form_Submit"
+            data-mx-component="Contact.Form"
           >
             <label>
               이름
@@ -472,6 +544,45 @@
         const nextTheme = currentTheme === "dark" ? "light" : "dark";
         document.documentElement.setAttribute("data-theme", nextTheme);
         toggleButton.textContent = nextTheme === "dark" ? "라이트 모드" : "다크 모드";
+      });
+
+      // Mixpanel: data-mx-event / data-mx-component 기반 주요 상호작용 이벤트 트래킹
+      window.addEventListener("DOMContentLoaded", () => {
+        const trackableEls = document.querySelectorAll("[data-mx-event]");
+
+        trackableEls.forEach((el) => {
+          const eventName = el.getAttribute("data-mx-event");
+          const componentName = el.getAttribute("data-mx-component") || null;
+
+          if (!eventName) return;
+
+          const handler = (e) => {
+            if (!window.mixpanel) return;
+
+            const props = {
+              component: componentName,
+              tag: el.tagName,
+            };
+
+            // Contact 폼 전송 시 추가 정보
+            if (el.classList.contains("contact-form")) {
+              const nameInput = el.querySelector('input[name="name"]');
+              const emailInput = el.querySelector('input[name="email"]');
+              Object.assign(props, {
+                has_name: Boolean(nameInput && nameInput.value.trim()),
+                has_email: Boolean(emailInput && emailInput.value.trim()),
+              });
+            }
+
+            mixpanel.track(eventName, props);
+          };
+
+          if (el.tagName === "FORM") {
+            el.addEventListener("submit", handler);
+          } else {
+            el.addEventListener("click", handler);
+          }
+        });
       });
     </script>
   </body>
